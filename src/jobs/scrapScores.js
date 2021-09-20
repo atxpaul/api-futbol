@@ -1,10 +1,13 @@
 import cheerio from 'cheerio';
 import axios from 'axios';
+import Match from '../models/match';
 
-exports.getData = async (url) => {
+exports.getData = async (url, matchId) => {
   const pageContent = await axios.get(url);
   const $ = cheerio.load(pageContent.data);
   let resultado;
+
+  console.log(`Jornada ${matchId}`);
   const listItems = $('.list-resultado');
   listItems.each(function (idx, el) {
     if ($(el).text().indexOf('Deportivo') > 0) {
@@ -39,4 +42,6 @@ exports.getData = async (url) => {
   } else {
     console.log('Perdió el Dépor');
   }
+  let match = new Match();
+  //TODO: Tenemos que insertar todos los partidos y, si existen, actualizarlos.
 };
