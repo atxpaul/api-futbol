@@ -18,6 +18,12 @@ exports.getData = async (url) => {
   let partido = resultado.split('                    ');
   console.log(partido);
 
+  let calendar = partido[3].trim();
+  console.log(calendar);
+  let day = calendar.substr(2, 5);
+  let hour = calendar.substr(8, 5);
+  console.log(`El partido es el ${day} a las ${hour}`);
+
   let goles = partido[1].split(' - ');
   console.log(goles);
 
@@ -28,6 +34,8 @@ exports.getData = async (url) => {
     (partido[2] == 'Deportivo' && goles[1] > goles[0])
   ) {
     console.log('Ganó el Dépor!');
+  } else if (partido[1] == '-') {
+    console.log('El partido no se jugó todavía');
   } else {
     console.log('Perdió el Dépor');
   }
