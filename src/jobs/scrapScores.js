@@ -1,8 +1,11 @@
 import cheerio from 'cheerio';
 import axios from 'axios';
 import Match from '../models/match';
+import MatchService from './../services/MatchService';
+const matchService = new MatchService(new Match().getInstance());
 
 exports.getData = async (url, matchId) => {
+  // let match = new Match();
   const pageContent = await axios.get(url);
   const $ = cheerio.load(pageContent.data);
   let resultado;
@@ -30,18 +33,46 @@ exports.getData = async (url, matchId) => {
   let goles = partido[1].split(' - ');
   console.log(goles);
 
+  match.id = matchId;
+  match.teamLocal = partido[0];
+  match.teamAway = partido[2];
+
+  match.score = goles;
+  match.date = day;
+
   if (goles[0] == goles[1]) {
     console.log('Empató el Dépor');
   } else if (
     (partido[0] == 'Deportivo' && goles[0] > goles[1]) ||
     (partido[2] == 'Deportivo' && goles[1] > goles[0])
   ) {
+    match.teamWinner = 'Depor';
     console.log('Ganó el Dépor!');
   } else if (partido[1] == '-') {
     console.log('El partido no se jugó todavía');
   } else {
     console.log('Perdió el Dépor');
   }
-  let match = new Match();
+  // test = await Match.find({ match: matchId });
+  // if (test) {
+  //   await findOneAndUpdate({ match: matchId }, match);
+  // } else {
+  //   Match.save(match);
+  // }
+
+  // Match.findOne({ match: matchId }).exec(function (err, match) {
+  //   if (err) {
+  //     console.log(`No se encuentra partido`);
+  //   }
+  //   if (match) {
+  //   } else {
+  //     match.save((err, matchStored) => {
+  //       if (err) {
+  //         console.log('Error al guardar partido');
+  //       }
+  //     });
+  //   }
+  // });
+
   //TODO: Tenemos que insertar todos los partidos y, si existen, actualizarlos.
 };
