@@ -1,8 +1,8 @@
 import cheerio from 'cheerio';
 import axios from 'axios';
-import Match from '../models/match';
-import MatchService from './../services/MatchService';
-const matchService = new MatchService(new Match().getInstance());
+// import Match from '../models/match';
+// import MatchService from './../services/MatchService';
+// const matchService = new MatchService(new Match().getInstance());
 
 exports.getData = async (url, matchId) => {
   // let match = new Match();
@@ -33,12 +33,12 @@ exports.getData = async (url, matchId) => {
   let goles = partido[1].split(' - ');
   console.log(goles);
 
-  match.id = matchId;
-  match.teamLocal = partido[0];
-  match.teamAway = partido[2];
+  // match.id = matchId;
+  // match.teamLocal = partido[0];
+  // match.teamAway = partido[2];
 
-  match.score = goles;
-  match.date = day;
+  // match.score = goles;
+  // match.date = day;
 
   if (goles[0] == goles[1]) {
     console.log('Empató el Dépor');
@@ -46,7 +46,7 @@ exports.getData = async (url, matchId) => {
     (partido[0] == 'Deportivo' && goles[0] > goles[1]) ||
     (partido[2] == 'Deportivo' && goles[1] > goles[0])
   ) {
-    match.teamWinner = 'Depor';
+    //match.teamWinner = 'Depor';
     console.log('Ganó el Dépor!');
   } else if (partido[1] == '-') {
     console.log('El partido no se jugó todavía');
