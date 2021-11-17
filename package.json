@@ -2,11 +2,12 @@
   "name": "api-futbol",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel-node index.js",
-    "dev:start": "nodemon --exec babel-node index.js"
+    "start": "node",
+    "dev:start": "nodemon ."
   },
   "keywords": [],
   "author": "",
@@ -21,10 +22,6 @@
     "slugify": "^1.6.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.5",
-    "@babel/node": "^7.15.4",
-    "@babel/preset-env": "^7.15.6",
-    "babel-loader": "^8.2.2",
     "nodemon": "^2.0.12"
   }
 }
