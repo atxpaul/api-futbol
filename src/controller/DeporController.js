@@ -1,4 +1,4 @@
-import container from '../persistence/container.js';
+import container from '../persistence/Container.js';
 import Scrap from '../jobs/Scrap.js';
 
 class DeporController {
