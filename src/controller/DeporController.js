@@ -7,6 +7,12 @@ class DeporController {
   }
 
   scrapResult = async (req, res) => {
+    this.scrapCore();
+
+    res.json({ requestProcess: true });
+  };
+
+  scrapCore = async () => {
     const scrap = new Scrap();
     const matchSeries = await scrap.getData();
 
@@ -19,8 +25,6 @@ class DeporController {
         await this.storage.save(match);
       }
     }
-
-    res.json({ requestProcess: true });
   };
 
   getResult = async (req, res) => {
@@ -42,13 +46,6 @@ class DeporController {
         lastMatch.result = game.result;
       }
     }
-
-    // console.log(
-    //   `El último partido el Dépor ${
-    //     lastMatch.winner == 'Dépor' ? 'ganó' : 'perdió'
-    //   } contra el ${lastMatch.rival} por ${lastMatch.result}`
-    // );
-
     return res.json([lastMatch, nextMatch]);
   };
 }
