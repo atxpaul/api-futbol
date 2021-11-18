@@ -18,13 +18,23 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 8080;
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, async () => {
   console.log(`Servidor http escuchando en el puerto ${server.address().port}`);
-  for (let i = 1; i <= 38; i++) {
-    scrap.getData(
-      `https://resultados.as.com/resultados/futbol/primera_rfef/2021_2022/jornada/grupo_i_a_${i}/`,
-      i
-    );
+  const matchSeries = await scrap.getData();
+  let lastMatch = {};
+  for (let matchId = 1; matchId <= 38; matchId++) {
+    let game = matchSeries[matchId];
+    if (game.winner == 'Pending' && matchId > 1) {
+      break;
+    }
+    lastMatch.winner = game.winner;
+    lastMatch.rival = game.rival;
+    lastMatch.result = game.result;
   }
+  console.log(
+    `El último partido el Dépor ${
+      lastMatch.winner == 'Dépor' ? 'ganó' : 'perdió'
+    } contra el ${lastMatch.rival} por ${lastMatch.result}`
+  );
 });
 server.on('error', (error) => console.log(`Error en servidor ${error}`));

@@ -1,64 +1,87 @@
 import cheerio from 'cheerio';
 import axios from 'axios';
-// import Match from '../models/match';
-// import MatchService from './../services/MatchService';
-// const matchService = new MatchService(new Match().getInstance());
+import config from '../../config/config.js';
 
 class Scrap {
   constructor() {}
-  getData = async (url, matchId) => {
+
+  getData = async () => {
+    const matchSeries = [];
     // let match = new Match();
-    const pageContent = await axios.get(url);
-    const $ = cheerio.load(pageContent.data);
-    let resultado;
+    console.log('Scraping');
+    for (let matchId = 1; matchId <= 38; matchId++) {
+      let match = { matchId: matchId };
+      const pageContent = await axios.get(`${config.url}${matchId}`);
+      const $ = cheerio.load(pageContent.data);
+      let result;
 
-    console.log(`Jornada ${matchId}`);
-    const listItems = $('.list-resultado');
-    listItems.each(function (idx, el) {
-      if ($(el).text().indexOf('Deportivo') > 0) {
-        resultado = $(el)
-          .text()
-          .replace(/(\r\n|\n|\r)/gm, '')
-          .trim();
+      //console.log(`Jornada ${matchId}`);
+      const listItems = $('.list-resultado');
+      listItems.each(function (idx, el) {
+        if ($(el).text().indexOf('Deportivo') > 0) {
+          result = $(el)
+            .text()
+            .replace(/(\r\n|\n|\r)/gm, '')
+            .trim();
+        }
+      });
+      //console.log(result);
+      let gameMatch = result.split('                    ');
+      //console.log(gameMatch);
+      if (gameMatch[0] == 'Deportivo') {
+        match.riazor = true;
+        match.rival = gameMatch[2];
+      } else {
+        match.riazor = false;
+        match.rival = gameMatch[0];
       }
-    });
-    console.log(resultado);
-    let partido = resultado.split('                    ');
-    console.log(partido);
+      match.result = gameMatch[1];
 
-    let calendar = partido[3].trim();
-    console.log(calendar);
-    let day = calendar.substr(2, 5);
-    let hour = calendar.substr(8, 5);
-    console.log(`El partido es el ${day} a las ${hour}`);
+      let calendar = gameMatch[3].trim();
+      //console.log(calendar);
+      match.day = `${calendar.substr(2, 5)}/${
+        calendar.substr(5, 2) > 5 ? 2021 : 2022
+      }`;
+      match.hour = calendar.substr(8, 5);
 
-    let goles = partido[1].split(' - ');
-    console.log(goles);
+      // let day = match.day.split('/');
+      // match.datetime = `${day.reverse().join('/')} ${match.hour}`;
+      // const date = new Date(match.datetime);
+      // console.log(date, match.datetime);
 
-    // match.id = matchId;
-    // match.teamLocal = partido[0];
-    // match.teamAway = partido[2];
+      //console.log(`El partido es el ${day} a las ${hour}`);
 
-    // match.score = goles;
-    // match.date = day;
+      let goals = gameMatch[1].split(' - ');
+      //console.log(goals);
 
-    if (goles[0] == goles[1]) {
-      console.log('Empató el Dépor');
-    } else if (
-      (partido[0] == 'Deportivo' && goles[0] > goles[1]) ||
-      (partido[2] == 'Deportivo' && goles[1] > goles[0])
-    ) {
-      //match.teamWinner = 'Depor';
-      console.log('Ganó el Dépor!');
-    } else if (partido[1] == '-') {
-      console.log('El partido no se jugó todavía');
-    } else if (partido[1] == 'Aplaz.') {
-      console.log('Aplazado');
-    } else {
-      console.log('Perdió el Dépor');
+      if (goals[0] == goals[1]) {
+        //console.log('Empató el Dépor');
+        match.winner = 'Draw';
+      } else if (
+        (match.riazor && goals[0] > goals[1]) ||
+        (!match.riazor && goals[1] > goals[0])
+      ) {
+        //console.log('Ganó el Dépor!');
+        match.winner = 'Dépor';
+      } else if (gameMatch[1] == '-') {
+        //console.log('El partido no se jugó todavía');
+        match.winner = 'Pending';
+      } else if (gameMatch[1] == 'Aplaz.') {
+        //console.log('Aplazado');
+        match.winner = 'Dépor';
+        match.result = '3 - 0';
+      } else {
+        //console.log('Perdió el Dépor');
+        match.winner = match.rival;
+      }
+      //console.log(match);
+      matchSeries.push(match);
     }
+    console.log('Scraped');
+    //console.log(matchSeries);
 
     //TODO: Tenemos que insertar todos los partidos y, si existen, actualizarlos.
+    return matchSeries;
   };
 }
 
