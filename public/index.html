@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"
+        integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>DÉPOR</title>
+</head>
+<body>
+    <header>
+        <img id="image" src="./assets/depor.svg" alt="">
+    </header>
+
+    <section class="panel positive hidden">
+        <h1>Si</h1>
+        <p class="lastMatch"><strong></strong></p>
+        <p class="nextMatch"></p>
+    </section>
+    <section class="panel negative hidden">
+        <h1>Non</h1>
+        <p class="lastMatch"><strong></strong></p>
+        <p class="nextMatch"></p>
+    </section>
+    <section class="panel draw hidden">
+        <h1>Empatou</h1>
+        <p class="lastMatch"><strong></strong></p>
+        <p class="nextMatch"></p>
+    </section>
+    <section class="panel error hidden">
+        <h1>Ufff</h1>
+        <p></p>
+        <button> <a href="/">Tentar de novo</a> </button>
+    </section>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
