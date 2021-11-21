@@ -4,16 +4,23 @@ import Scrap from '../jobs/Scrap.js';
 class DeporController {
   constructor() {
     this.storage = new container('.results');
+    this.isScraping = false;
   }
 
   scrapResult = async (req, res) => {
-    this.scrapCore();
-
-    res.json({ requestProcess: true });
+    if (this.isScraping == false) {
+      console.log('As isScraping is false, going to scrap');
+      this.scrapCore();
+      res.json({ requestProcess: true });
+    } else {
+      console.log('As isScraping is false, NOT going to scrap');
+      res.json({ requestProcess: false });
+    }
   };
 
   scrapCore = async () => {
     const scrap = new Scrap();
+    this.isScraping = true;
     const matchSeries = await scrap.getData();
 
     if (matchSeries.length > 0) {
@@ -25,6 +32,7 @@ class DeporController {
         await this.storage.save(match);
       }
     }
+    this.isScraping = false;
   };
 
   getResult = async (req, res) => {

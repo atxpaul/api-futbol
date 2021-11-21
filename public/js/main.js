@@ -67,6 +67,7 @@ function showDraw(lastMatch, nextMatch) {
 async function processData(matches) {
   const lastMatch = matches[0];
   const nextMatch = matches[1];
+
   if (lastMatch.winner == 'Dépor') {
     showPositive(lastMatch, nextMatch);
   } else if (lastMatch.winner == 'Draw') {
@@ -78,6 +79,13 @@ async function processData(matches) {
 
 async function main() {
   const matches = await getData(`${document.URL}api/depor`);
+  if (
+    Object.keys(matches[0]).length === 0 &&
+    matches[0].constructor === Object
+  ) {
+    const load = await getData(`${document.URL}api/depor/scrap`);
+    alert('Estamos recopilando os datos, agarda uns intres e refresca!');
+  }
   await processData(matches);
   console.log(matches);
 }

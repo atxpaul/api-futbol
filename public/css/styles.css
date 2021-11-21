@@ -38,7 +38,7 @@ header img {
 }
 
 .panel p {
-  -webkit-text-stroke: 0.2px grey;
+  /* -webkit-text-stroke: 0.1px grey; */
   margin-bottom: 4rem;
   max-width: 40rem;
   line-height: 1.4;
