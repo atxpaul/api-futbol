@@ -67,6 +67,12 @@ header img {
   color: white;
 }
 
+.panel h2 {
+  color: white;
+  font-weight: 300;
+  text-decoration: underline;
+}
+
 .panel .permission {
   background-color: black;
   color: white;
@@ -86,4 +92,11 @@ header img {
 
 .hidden {
   display: none;
+}
+
+@media only screen and (min-width: 768px) {
+  header img {
+    width: 10rem;
+    margin-left: 2rem;
+  }
 }
